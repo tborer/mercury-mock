@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mercury Agent Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div id="app">
+      <aside class="sidebar">
+        <div class="logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 12l-4-4-4 4"></path><path d="M12 8v8"></path></svg>
+          Mercury
+        </div>
+        <nav class="nav-links">
+          <a href="#" class="nav-link">Dashboard</a>
+          <a href="#" class="nav-link">Transactions</a>
+          <a href="#" class="nav-link">Cards</a>
+          <div class="nav-section-title">Developers</div>
+          <a href="#" class="nav-link">API Tokens</a>
+          <a href="#" class="nav-link active">Agent Hub</a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-header">
+          <div>
+            <h1 class="page-title">Agent Hub</h1>
+            <p class="page-subtitle">Provision, constrain, and audit AI agents securely.</p>
+          </div>
+          <button class="btn btn-danger kill-switch" id="killSwitch">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+            Revoke Agent Access
+          </button>
+        </header>
+
+        <div class="dashboard-grid">
+          <div class="column-main">
+            <!-- 1. Agent Provisioning Header -->
+            <section class="card provisioning-section">
+              <div class="card-header">
+                <h2>Provisioning: Accounts Payable Copilot</h2>
+                <span class="badge badge-success">Active</span>
+              </div>
+              <div class="card-body">
+                <div class="input-group">
+                  <label for="mcpEndpoint">MCP (Model Context Protocol) Endpoint URL</label>
+                  <div class="input-with-button">
+                    <input type="text" id="mcpEndpoint" value="wss://mcp.mercury.com/v1/agents/ap-copilot-8f92a" readonly>
+                    <button class="btn btn-secondary">Copy</button>
+                  </div>
+                  <p class="help-text">Use this endpoint to securely connect Claude or other MCP-compatible clients to this agent profile.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- 2. Granular Agentic Scopes & Guardrails -->
+            <section class="card scopes-section">
+              <div class="card-header">
+                <h2>Agentic Scopes & Guardrails</h2>
+              </div>
+              <div class="card-body">
+                <div class="scope-group">
+                  <h3>Context Scopes</h3>
+                  <div class="toggle-row">
+                    <div class="toggle-info">
+                      <strong>Read Account Balances</strong>
+                      <span>Allow agent to access real-time balance for all checking/savings accounts.</span>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <div class="toggle-row">
+                    <div class="toggle-info">
+                      <strong>Read Transaction History</strong>
+                      <span>Allow agent to analyze past transactions to reconcile invoices.</span>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="scope-group">
+                  <h3>Action Guardrails</h3>
+                  <div class="toggle-row">
+                    <div class="toggle-info">
+                      <strong>Draft Wire Transfers</strong>
+                      <span>Allow agent to prepare wire transfers. Requires manual human approval.</span>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox" checked>
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <div class="toggle-row">
+                    <div class="toggle-info">
+                      <strong>Issue Single-Use Virtual Cards</strong>
+                      <span>Allow agent to spin up temporary corporate cards for approved vendors.</span>
+                    </div>
+                    <label class="switch">
+                      <input type="checkbox">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="scope-group limits-group">
+                  <h3>Hard Limits</h3>
+                  <div class="input-group">
+                    <label for="maxExecutionLimit">Max Autonomous Execution Limit (USD)</label>
+                    <input type="number" id="maxExecutionLimit" value="100.00" step="10.00">
+                    <p class="help-text">Any action exceeding this amount will automatically require human-in-the-loop approval.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="column-side">
+            <!-- 3. Agent Activity & Approval Feed -->
+            <section class="card activity-section">
+              <div class="card-header">
+                <h2>Activity & Approval Feed</h2>
+                <div class="live-indicator"><span class="dot"></span> Live</div>
+              </div>
+              <div class="card-body">
+                <div class="feed-container" id="feedContainer">
+                  <!-- Action Required -->
+                  <div class="feed-item action-required">
+                    <div class="feed-icon warning">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="feed-content">
+                      <p class="feed-text"><strong>Agent drafted a $1,200 wire</strong> to AWS Inc. based on matched invoice #442.</p>
+                      <div class="feed-actions">
+                        <button class="btn btn-primary btn-sm">Approve</button>
+                        <button class="btn btn-secondary btn-sm">Reject</button>
+                      </div>
+                      <a href="#" class="view-logic-link">View Logic (Audit Trail)</a>
+                    </div>
+                  </div>
+
+                  <!-- Informational -->
+                  <div class="feed-item informational">
+                    <div class="feed-icon info">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    </div>
+                    <div class="feed-content">
+                      <p class="feed-text">Agent swept $5,000 into Mercury Treasury (Rule: Balance > $50k).</p>
+                      <a href="#" class="view-logic-link">View Logic</a>
+                    </div>
+                  </div>
+                  
+                  <!-- Informational -->
+                  <div class="feed-item informational">
+                    <div class="feed-icon info">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    </div>
+                    <div class="feed-content">
+                      <p class="feed-text">Agent fetched account balance for Context Scope.</p>
+                      <a href="#" class="view-logic-link">View Logic</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Logic Modal (Hidden by default) -->
+    <div class="modal-overlay" id="logicModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3>Audit Trail: Action Execution Logic</h3>
+          <button class="btn-close" id="closeModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="code-block">
+            <pre><code>{
+  "timestamp": "2026-04-18T14:32:01Z",
+  "agent_id": "ap-copilot-8f92a",
+  "trigger": "incoming_invoice_detected",
+  "reasoning": "Invoice #442 matched AWS monthly usage. Amount $1,200 is above auto-execution limit of $100. Action delegated to Human-in-the-Loop.",
+  "api_calls": [
+    {
+      "endpoint": "GET /v1/account/balance",
+      "status": 200
+    },
+    {
+      "endpoint": "POST /v1/account/transactions/draft",
+      "status": 201,
+      "payload_hash": "a8f93...21b"
+    }
+  ]
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
